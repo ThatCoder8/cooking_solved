@@ -1,5 +1,29 @@
-const apiKey = '30425538d7034aa0a3c5401c6bafd59b'
+const apiKey = '30425538d7034aa0a3c5401c6bafd59b';
 const apiUrl = 'https://api.spoonacular.com/recipes';
+
+const cookingTools = [
+  'Pan',
+  'Pot',
+  'Skillet',
+  'Wok',
+  'Dutch oven',
+  'Baking sheet',
+  'Blender',
+  'Food processor',
+  'Stand mixer',
+  'Hand mixer',
+  'Immersion blender',
+  'Slow cooker',
+  'Rice cooker',
+  'Chef\'s knife',
+  'Cutting board',
+  'Measuring cups',
+  'Measuring spoons',
+  'Mixing bowls',
+  'Whisk',
+  'Wooden spoon',
+  // Add more tools as needed
+];
 
 function fetchRecipeDetails(recipeId) {
   const recipeDetailsUrl = `${apiUrl}/${recipeId}/information?apiKey=${apiKey}`;
@@ -15,7 +39,7 @@ function fetchRecipeDetails(recipeId) {
 function fetchRecipes(ingredients) {
   const recipeContainer = document.getElementById('recipe-container');
   recipeContainer.innerHTML = '<p>Loading recipes...</p>';
-  recipeContainer.classList.add('recipe-grid'); // Add this line
+  recipeContainer.classList.add('recipe-grid');
 
   const url = `${apiUrl}/search?apiKey=${apiKey}&query=${ingredients}&number=5`;
 
@@ -49,6 +73,11 @@ function processRecipes(recipes, searchedIngredients) {
 
     recipe.shoppingList = nonIncludedIngredients;
 
+    // Include cooking tools in the recipe object
+    recipe.cookingTools = cookingTools.filter(tool =>
+      (recipe.title + ' ' + recipe.instructions).toLowerCase().includes(tool.toLowerCase())
+    );
+
     return recipe;
   });
 }
@@ -67,10 +96,16 @@ function displayRecipes(recipes) {
       ? `<p>Shopping List: ${recipe.shoppingList.join(', ')}</p>`
       : '<p>No shopping list</p>';
 
+    // Display the cooking tools
+    const toolsList = Array.isArray(recipe.cookingTools) && recipe.cookingTools.length > 0
+      ? `<p>Cooking Tools: ${recipe.cookingTools.join(', ')}</p>`
+      : '<p>No cooking tools</p>';
+
     recipeCard.innerHTML = `
       <h3>${recipe.title}</h3>
       <img src="${recipe.image}" alt="${recipe.title}" style="width: 320px; height: 180px;" />
       ${shoppingList}
+      ${toolsList}
     `;
 
     const link = document.createElement('a');
