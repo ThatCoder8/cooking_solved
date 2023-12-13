@@ -22,6 +22,7 @@ const cookingTools = [
   'Mixing bowls',
   'Whisk',
   'Wooden spoon',
+  'Bowl'
 ];
 
 function fetchRecipeDetails(recipeId) {
