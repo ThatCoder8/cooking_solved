@@ -111,6 +111,8 @@ function displayRecipes(recipes) {
     const link = document.createElement('a');
     link.href = recipe.sourceUrl;
     link.textContent = 'View Recipe Details';
+    // Open the link in a new tab
+    link.target = '_blank';
     recipeCard.appendChild(link);
 
     recipeContainer.appendChild(recipeCard);
