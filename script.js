@@ -1,6 +1,13 @@
 const apiKey = '30425538d7034aa0a3c5401c6bafd59b';
 const apiUrl = 'https://api.spoonacular.com/recipes';
 
+// Updated client ID and redirect URL
+const clientId = 'cookingsolved-01345b2209c72f0d71c8ad5402cca8be2632127170105221499';
+const redirectUrl = 'http://127.0.0.1:5500/index.html';
+
+// OAuth2 Base URL
+const oauth2BaseUrl = 'https://api.kroger.com/v1/connect/oauth2';
+
 const cookingTools = [
   'Pan',
   'Pot',
@@ -121,6 +128,8 @@ function displayRecipes(recipes) {
 
 function searchRecipes() {
   const ingredientsInput = document.getElementById('ingredients');
+  ingredientsInput.placeholder = 'e.g., pepper flakes, steak, oil...                                                  ';
+
   const ingredients = ingredientsInput.value.trim();
 
   if (ingredients === '') {
@@ -132,3 +141,6 @@ function searchRecipes() {
 
   ingredientsInput.value = '';
 }
+
+// Set initial placeholder for the search box
+searchRecipes();
