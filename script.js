@@ -128,7 +128,7 @@ function displayRecipes(recipes) {
 
 function searchRecipes() {
   const ingredientsInput = document.getElementById('ingredients');
-  ingredientsInput.placeholder = 'e.g., pepper flakes, cowgirl steak, olive oil...                                                  ';
+  ingredientsInput.placeholder = 'e.g., steak, mushrooms...                                                  ';
 
   const ingredients = ingredientsInput.value.trim();
 
