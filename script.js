@@ -133,7 +133,6 @@ function searchRecipes() {
   const ingredients = ingredientsInput.value.trim();
 
   if (ingredients === '') {
-    alert('Please enter ingredients.');
     return;
   }
 
