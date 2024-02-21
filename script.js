@@ -1,5 +1,3 @@
-
-
 const apiKey = '30425538d7034aa0a3c5401c6bafd59b';
 const apiUrl = 'https://api.spoonacular.com/recipes';
 const clientId = 'cookingsolved-01345b2209c72f0d71c8ad5402cca8be2632127170105221499';
@@ -56,15 +54,11 @@ function addToKrogerCart(accessToken, item) {
 
 // Add a function to add all items to Kroger cart
 function addAllToKrogerCart(accessToken, shoppingList) {
-  shoppingList.forEach(item => {
-    addToKrogerCart(accessToken, { productId: item, quantity: 1 })
-      .then(response => {
-        console.log('Item added to Kroger cart:', response);
-      })
-      .catch(error => {
-        console.error('Error adding item to Kroger cart:', error);
-      });
+  const addToCartPromises = shoppingList.map(item => {
+    return addToKrogerCart(accessToken, { productId: item, quantity: 1 });
   });
+
+  return Promise.all(addToCartPromises);
 }
 
 function exchangeAuthorizationCodeForToken(authorizationCode) {
@@ -100,11 +94,9 @@ const authorizationCode = urlParams.get('code');
 if (authorizationCode) {
   exchangeAuthorizationCodeForToken(authorizationCode)
     .then(tokenData => {
-      // Handle the obtained access token, e.g., store it securely for API requests
       console.log('Access Token:', tokenData.access_token);
 
-      // You may store the access token securely for later use
-      // For simplicity, we'll use it immediately for recipe fetching
+      // Fetch recipes and then add items to Kroger cart
       fetchRecipes('your-ingredients', tokenData.access_token);
     })
     .catch(error => {
@@ -216,22 +208,20 @@ function displayRecipes(recipes, accessToken) {
 function addToCartAndRedirect(recipe, accessToken) {
   addToCart(recipe, accessToken); // Call the existing addToCart function
 
-  // Redirect to Kroger's site (you may need to replace this URL with the actual Kroger cart URL)
-  window.location.href = 'https://www.kroger.com/cart';
+  // Redirect to Kroger's site in a new tab (you may need to replace this URL with the actual Kroger cart URL)
+  window.open('https://www.kroger.com/cart', '_blank');
 }
 
 function addToCart(recipe, accessToken) {
   console.log('Adding to Kroger cart:', recipe.shoppingList);
 
-  recipe.shoppingList.forEach(item => {
-    addToKrogerCart(accessToken, { productId: item, quantity: 1 })
-      .then(response => {
-        console.log('Item added to Kroger cart:', response);
-      })
-      .catch(error => {
-        console.error('Error adding item to Kroger cart:', error);
-      });
-  });
+  addAllToKrogerCart(accessToken, recipe.shoppingList)
+    .then(() => {
+      console.log('Items added to Kroger cart');
+    })
+    .catch(error => {
+      console.error('Error adding items to Kroger cart:', error);
+    });
 }
 
 function searchRecipes() {
